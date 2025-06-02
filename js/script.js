@@ -1,8 +1,37 @@
 const additionalFieldsDiv = document.getElementById("additional-fields");
 const animalTypeSelect = document.getElementById("animal-type");
+const tbody = document.querySelector("#animals-table tbody");
 
 let animals = JSON.parse(localStorage.getItem("animals")) || [];
 
+class Animal {
+    constructor(name, type, gender, birthDate, city, isSterilized) {
+        this.name = name;
+        this.type = type;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.city = city;
+        this.isSterilized = isSterilized;
+    }
+}
+
+class Dog extends Animal {
+    constructor(name, type, gender, birthDate, city, isSterilized, breed, isTrained) {
+        super(name, type, gender, birthDate, city, isSterilized);
+        this.breed = breed;
+        this.isTrained = isTrained;
+    }
+}
+
+class Cat extends Animal {
+    constructor(name, type, gender, birthDate, city, isSterilized, breed, color) {
+        super(name, type, gender, birthDate, city, isSterilized);
+        this.breed = breed;
+        this.color = color;
+    }
+}
+
+// добавление новых полей для ввода данных при разных типах животных
 animalTypeSelect.addEventListener("change", () => {
     additionalFieldsDiv.innerHTML = "";
 
@@ -32,6 +61,7 @@ animalTypeSelect.addEventListener("change", () => {
     }
 })
 
+// обработка отправки формы и добавления нового животного в таблицу
 document.getElementById("animal-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -67,3 +97,36 @@ document.getElementById("animal-form").addEventListener("submit", (e) => {
 
     renderTable();
 })
+
+// отображение данных формы в таблице
+function renderTable() {
+    tbody.innerHTML = "";
+
+    animals.forEach((animal, index) => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+      <td>${animal.name}</td>
+      <td>${animal.city}</td>
+      <td>${animal.birthDate}</td>
+      <td>${animal.gender}</td>
+      <td>${animal.isSterilized ? "Да" : "Нет"}</td>
+      <td>${animal.type}</td>
+      <td>${getAdditionalFieldsText(animal)}</td>
+      <td><button data-index="${index}" class="delete-btn">Удалить</button></td>
+    `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+// возвращает строки для отображения дополнительной информации о животном
+function getAdditionalFieldsText(animal) {
+    if (animal instanceof Dog) {
+        return `Порода: ${animal.breed}, Дрессирован: ${animal.isTrained ? "Да" : "Нет"}`;
+    } else if (animal instanceof Cat) {
+        return `Порода: ${animal.breed}, Окрас: ${animal.color}`;
+    } else {
+        return "";
+    }
+}
