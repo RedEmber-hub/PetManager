@@ -10,7 +10,66 @@
 </head>
 
 <body>
+    <div class="container">
+        <h1>Учет Животных</h1>
 
+        <form id="animal-form">
+            <label>
+                Имя:
+                <input type="text" name="name" required>
+            </label>
+
+            <label>
+                Тип животного:
+                <select name="type" id="animal-type" required>
+                    <option value="">-- Выберите --</option>
+                    <option value="dog">Собака</option>
+                    <option value="cat">Кошка</option>
+                </select>
+            </label>
+
+            <label>
+                Пол:
+                <select name="gender" required>
+                    <option value="">-- Выберите --</option>
+                    <option value="male">Мужской</option>
+                    <option value="female">Женский</option>
+                    <option value="unknown">Неизвестно</option>
+                </select>
+            </label>
+
+            <label>
+                Дата рождения:
+                <input type="date" name="arrivalDate" required>
+            </label>
+
+            <label>
+                Город:
+                <input type="text" name="city" required>
+            </label>
+
+            <label class="checkbox">
+                Стерилизован
+                <input type="checkbox" name="isSterilized">
+            </label>
+
+            <div id="extra-fields"></div>
+
+            <button type="submit">Сохранить</button>
+        </form>
+
+        <h2>Список животных</h2>
+        <table id="animals-table">
+            <thead>
+                <tr id="table-header">
+                    <!-- Заголовки будут динамически добавлены -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Список животных -->
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>
