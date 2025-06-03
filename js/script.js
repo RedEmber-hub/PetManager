@@ -114,10 +114,20 @@ function renderTable() {
       <td>${animal.isSterilized ? "Да" : "Нет"}</td>
       <td>${animal.type}</td>
       <td>${getAdditionalFieldsText(animal)}</td>
-      <td><button data-index="${index}" class="delete-btn">Удалить</button></td>
+      <td><button data-id="${animal.id}" class="delete-btn">Удалить</button></td>
     `;
 
         tbody.appendChild(tr);
+    });
+
+    document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", (e) => {
+            const idToDelete = e.target.dataset.id;
+
+            animals = animals.filter(a => a.id !== idToDelete);
+            localStorage.setItem("animals", JSON.stringify(animals));
+            renderTable();
+        });
     });
 }
 
