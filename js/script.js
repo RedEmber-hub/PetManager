@@ -2,8 +2,6 @@ const additionalFieldsDiv = document.getElementById("additional-fields");
 const animalTypeSelect = document.getElementById("animal-type");
 const tbody = document.querySelector("#animals-table tbody");
 
-let animals = JSON.parse(localStorage.getItem("animals")) || [];
-
 class Animal {
     constructor(name, type, gender, birthDate, city, isSterilized) {
         this.id = crypto.randomUUID();
@@ -32,8 +30,26 @@ class Cat extends Animal {
     }
 }
 
-// добавление новых полей для ввода данных при разных типах животных
-animalTypeSelect.addEventListener("change", () => {
+// Функция для восстановления экземпляров из plain объектов
+function reviveAnimals(rawAnimals) {
+    return rawAnimals.map(obj => {
+        switch (obj.type) {
+            case 'dog':
+                return Object.assign(new Dog(), obj);
+            case 'cat':
+                return Object.assign(new Cat(), obj);
+            default:
+                return Object.assign(new Animal(), obj);
+        }
+    });
+}
+
+// Загрузка и "оживление" животных из localStorage
+const rawAnimals = JSON.parse(localStorage.getItem("animals")) || [];
+let animals = reviveAnimals(rawAnimals);
+
+// функция для обновления полей формы при изменении типа животного
+function updateAdditionalFields() {
     additionalFieldsDiv.innerHTML = "";
 
     if (animalTypeSelect.value == "dog") {
@@ -60,7 +76,12 @@ animalTypeSelect.addEventListener("change", () => {
       </label>
     `;
     }
-})
+}
+
+// обновление доп полей формы при изменении типа животного
+animalTypeSelect.addEventListener("change", updateAdditionalFields);
+
+updateAdditionalFields();
 
 // обработка отправки формы и добавления нового животного в таблицу
 document.getElementById("animal-form").addEventListener("submit", (e) => {
@@ -141,3 +162,4 @@ function getAdditionalFieldsText(animal) {
         return "";
     }
 }
+
