@@ -6,6 +6,7 @@ let animals = JSON.parse(localStorage.getItem("animals")) || [];
 
 class Animal {
     constructor(name, type, gender, birthDate, city, isSterilized) {
+        this.id = crypto.randomUUID();
         this.name = name;
         this.type = type;
         this.gender = gender;
